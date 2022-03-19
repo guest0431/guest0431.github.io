@@ -7,7 +7,7 @@
     "start": "next start",
     "export": "next export",
     "lint": "next lint",
-    "deploy": "yarn build && yarn export && git add -f out && git checkout gh-pages && rm -r _next && rm -r assets && mv out/* . && git add . && git commit -m 'Deploy gh-pages' && git push && git checkout main"
+    "deploy": "yarn build && yarn export && git add -f out && git checkout gh-pages && rm -r _next && rm -r assets && mv out/* . && git add . && git commit -m 'Deploy gh-pages' && git push && git checkout master"
   },
   "dependencies": {
     "next": "12.0.9",
