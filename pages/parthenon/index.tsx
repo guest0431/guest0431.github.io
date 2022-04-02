@@ -17,6 +17,10 @@ const displayStatus: {[status: string]: string} = {
   [TERMINATED]: "OFFLINE",
   [RUNNING]: "ONLINE",
 }
+const styleStatus: {[status: string]: string} = {
+  [TERMINATED]: styles.statusRed,
+  [RUNNING]: styles.statusGreen,
+}
 const displayButton: {[status: string]: string} = {
   [TERMINATED]: "START",
   [RUNNING]: "STOP",
@@ -56,6 +60,7 @@ const Manager: NextPage = () => {
   const updateInstanceStatus = useCallback(() => {
     if (accessToken === "") return
     if (serverData === null) return;
+    setInstanceStatus(null);
     getInstance(serverData, accessToken, (status) => {
       setInstanceStatus(status)
       setLastUpdated(new Date())
@@ -107,15 +112,18 @@ const Manager: NextPage = () => {
 
   return (
     <Fragment>
+      <h1>Parthenon <i className={`${styles.delete} lni lni-trash-can`} onClick={() => setServerData(null)}/> </h1>
       <div>IP: {instanceStatus ? instanceStatus.ip : " "}</div>
       <div className={styles.status}>
         {"STATUS: "}
-        {!!instanceStatus
-          ? displayStatus[instanceStatus.status] || instanceStatus.status
-          : "Checking status..."
-        }
+        <span className={!!instanceStatus && styleStatus[instanceStatus.status] || ""}>
+          {!!instanceStatus
+            ? displayStatus[instanceStatus.status] || instanceStatus.status
+            : "Checking status..."
+          }
+        </span>
         <button className={`${styles.reload} ${isIdle ? styles.loading : ""}`} type="button" onClick={updateInstanceStatus}>
-          <img className={`${!isIdle ? styles.loading : " "}`} src="/assets/reload.png" />
+          <i className={`${!isIdle ? styles.loading : " "} lni lni-reload reload`} />
         </button>
       </div>
       <p>Last updated: {lastUpdated.toLocaleDateString() + " " + lastUpdated.toLocaleTimeString()}</p>
@@ -145,7 +153,6 @@ const Parthenon: NextPage = () => {
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"></link>
       </Head>
       <div className={styles.box}>
-        <h1>Parthenon</h1>
         <Manager />
       </div>
     </div>
